@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - NewsGeoPreview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+
+  <body style="color: var(--secondary)">
+    <!-- Background Fixed -->
+    <div id="fixed-map-bg"></div>
+    <div id="bg-overlay"></div>
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+      <div
+        class="container mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <a
+          href="index_NewsGeo.html"
+          class="logo-text"
+          style="text-decoration: none"
+          >NewsGeo</a
+        >
+
+        <div class="flex items-center">
+          <!-- Toggle Premium Mode -->
+          <label class="flex items-center cursor-pointer mr-4">
+            <input type="checkbox" id="premium-toggle" class="hidden" />
+            <div class="w-11 h-6 bg-gray-300 rounded-full relative transition">
+              <div
+                class="dot absolute w-5 h-5 bg-white rounded-full top-0.5 left-0.5 transition duration-300"
+              ></div>
+            </div>
+            <span
+              id="premiumLabel"
+              class="ml-2 font-semibold"
+              style="color: var(--secondary)"
+              >Standard Mode</span
+            >
+          </label>
+
+          <!-- Tombol Upgrade -->
+          <a href="#" class="primary-btn hidden sm:block">Upgrade Paket</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main
+      class="container mx-auto p-6 flex flex-col items-center justify-start min-h-[85vh]"
+    >
+      <!-- Kolom Pencarian -->
+      <div
+        class="w-full max-w-3xl bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg mt-4"
+      >
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold mb-3" style="color: var(--dark)">
+            Cari Berita & Analisis Lokasi
+          </h2>
+          <p class="text-lg" style="color: var(--secondary)">
+            Temukan berita terkini dan lihat lokasi kejadiannya secara
+            interaktif.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+          <input
+            type="text"
+            id="search-query"
+            class="flex-grow p-4 text-lg border border-gray-300 rounded-full transition shadow-sm pl-6"
+            placeholder="Contoh: Banjir Jakarta, Gempa Cianjur..."
+          />
+          <button id="search-btn" class="primary-btn text-lg px-8 shadow-md">
+            Cari
+          </button>
+        </div>
+
+        <!-- Info Free Tier -->
+        <div
+          id="free-tier-info"
+          class="bg-blue-50/80 rounded-xl p-4 mb-6 border border-blue-100 flex flex-wrap justify-center gap-4 text-sm"
+        >
+          <div class="flex items-center">
+            <span class="mr-2">⚠️</span> <strong>Kapasitas:</strong>&nbsp;Sisa
+            <span id="capacity-number" class="mx-1 font-bold">3</span>
+            pencarian.
+          </div>
+          <div class="flex items-center">
+            <span class="mr-2">✅</span>
+            <strong>Fitur Lokasi:</strong>&nbsp;Aktif.
+          </div>
+          <div class="flex items-center">
+            <span class="mr-2">🔒</span> <strong>Review:</strong>&nbsp;Blur
+            (Free).
+          </div>
+        </div>
+
+        <!-- Loader Pencarian -->
+        <div id="loader" class="hidden mx-auto my-8 loader"></div>
+
+        <!-- Hasil Pencarian -->
+        <div id="result-container" class="mt-2"></div>
+        <div id="search-results" class="space-y-4"></div>
+
+        <!-- Pagination -->
+        <div
+          id="pagination-container"
+          class="flex justify-center items-center space-x-2 mt-8 flex-wrap"
+        ></div>
+
+        <!-- Placeholder Awal -->
+        <div
+          id="output-placeholder"
+          class="hidden text-center py-10"
+          style="color: var(--secondary); opacity: 0.6"
+        >
+          <p>Hasil pencarian akan muncul di sini.</p>
+        </div>
+
+        <!-- BAGIAN HIGHLIGHT BERITA TERKINI -->
+        <div id="highlight-section" class="mt-12 pt-8 border-t border-gray-200">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-red-500 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
+                />
+              </svg>
+              <h3 class="text-xl font-bold" style="color: var(--dark)">
+                Highlight Berita Terkini
+              </h3>
+            </div>
+            <span
+              id="highlight-page-indicator"
+              class="text-xs text-gray-400 hidden md:block"
+              >Halaman 1</span
+            >
+          </div>
+
+          <div id="highlight-loader" class="flex justify-center py-10">
+            <div class="small-loader"></div>
+            <span class="ml-3 text-gray-500">Mengambil berita populer...</span>
+          </div>
+
+          <div class="relative px-0 sm:px-12">
+            <!-- Tombol Previous -->
+            <button
+              id="btn-prev-highlight"
+              class="highlight-nav-btn absolute left-0 top-1/2 transform -translate-y-1/2 hidden sm:flex"
+              disabled
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+
+            <div
+              id="highlight-container"
+              class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden"
+            ></div>
+
+            <!-- Tombol Next -->
+            <button
+              id="btn-next-highlight"
+              class="highlight-nav-btn absolute right-0 top-1/2 transform -translate-y-1/2 hidden sm:flex"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div
+            class="flex justify-center mt-4 space-x-4 sm:hidden"
+            id="mobile-nav-container"
+          >
+            <button
+              id="btn-prev-highlight-mobile"
+              class="highlight-nav-btn"
+              disabled
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <button id="btn-next-highlight-mobile" class="highlight-nav-btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div
+            id="highlight-error"
+            class="hidden text-center py-6 text-red-400 text-sm"
+          >
+            Gagal memuat berita terkini. Silakan coba cari manual.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- MODAL / POPUP (Analisis Peta & Review) -->
+    <!-- ======================================================== -->
+    <div
+      id="analysis-modal"
+      class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 sm:p-6"
+    >
+      <div
+        id="modal-backdrop"
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+      ></div>
+
+      <!-- Modal Content (Lebih Tinggi untuk Vertikal Layout) -->
+      <div
+        class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col overflow-hidden transform transition-all scale-100"
+      >
+        <!-- Header Modal -->
+        <div
+          class="flex justify-between items-center p-4 border-b border-gray-200 bg-white z-10 shrink-0"
+        >
+          <div>
+            <h3 class="text-lg font-bold" style="color: var(--dark)">
+              Analisis Berita
+            </h3>
+          </div>
+          <button
+            id="close-modal-btn"
+            class="p-2 rounded-full hover:bg-gray-100 transition text-gray-500 hover:text-red-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Body Modal (Scrollable Vertikal) -->
+        <div class="flex-grow overflow-y-auto modal-scroll bg-gray-50">
+          <!-- Layout: FLEX COLUMN (Vertikal) -->
+          <div class="flex flex-col w-full h-full">
+            <!-- BAGIAN 1: PETA (Top) -->
+            <!-- Tinggi fixed agar tidak terlalu makan tempat -->
+            <div
+              class="relative w-full h-[350px] bg-gray-200 shrink-0 border-b border-gray-200"
+            >
+              <div id="map" class="absolute inset-0 w-full h-full z-0"></div>
+
+              <!-- Overlay Loading Peta -->
+              <div
+                id="map-loading-overlay"
+                class="absolute inset-0 flex items-center justify-center bg-gray-100 z-[1]"
+              >
+                <span class="text-gray-500 flex items-center"
+                  ><span class="small-loader mr-2"></span> Memuat Peta...</span
+                >
+              </div>
+
+              <!-- Label Judul di atas peta -->
+              <div class="absolute top-4 left-4 right-4 z-[400]">
+                <div
+                  class="bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-md text-sm inline-block"
+                >
+                  <span class="font-bold block text-xs text-gray-500 uppercase"
+                    >Lokasi Terdeteksi:</span
+                  >
+                  <span
+                    id="modal-location-text"
+                    class="font-semibold text-gray-800"
+                    >Menunggu data...</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- BAGIAN 2: RINGKASAN (Bottom) -->
+            <div class="p-6 lg:p-8 bg-white flex-grow">
+              <!-- Detail Berita -->
+              <div class="mb-6">
+                <h4 class="text-xs font-bold text-gray-400 uppercase mb-1">
+                  Judul Berita
+                </h4>
+                <h2
+                  id="modal-article-title"
+                  class="text-xl font-bold text-gray-800 leading-tight"
+                >
+                  Judul Berita
+                </h2>
+                <a
+                  id="modal-article-link"
+                  href="#"
+                  target="_blank"
+                  class="text-sm text-blue-500 hover:underline mt-1 inline-block"
+                  >Buka Sumber Asli &nearr;</a
+                >
+              </div>
+
+              <hr class="border-gray-100 mb-6" />
+
+              <!-- Ringkasan AI -->
+              <div class="relative min-h-[200px]">
+                <h4 class="text-xs font-bold text-gray-400 uppercase mb-3">
+                  Ringkasan AI (Review)
+                </h4>
+
+                <!-- Loader Ringkasan -->
+                <div
+                  id="review-loader"
+                  class="absolute inset-0 bg-white z-20 flex items-center justify-center"
+                >
+                  <div class="small-loader mr-2"></div>
+                  <span class="text-gray-500">Menganalisis konten...</span>
+                </div>
+
+                <!-- Gambar Berita -->
+                <div
+                  id="newsImages"
+                  class="mb-4 grid grid-cols-2 gap-3 hidden"
+                >
+                  <!-- gambar akan di-inject via JS -->
+                </div>
+
+                <!-- Konten Ringkasan -->
+                <div
+                  id="review-content"
+                  class="text-gray-600 leading-relaxed text-sm lg:text-base space-y-3 pb-8"
+                >
+                  <!-- Isi review masuk sini -->
+                </div>
+
+                <!-- Blur Overlay (Free Tier) -->
+                <div
+                  id="blur-overlay"
+                  class="absolute inset-0 review-blur-overlay flex flex-col justify-end items-center text-center p-4 z-10 rounded-lg"
+                >
+                  <div
+                    class="bg-white/90 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100 w-full"
+                  >
+                    <h4 class="text-lg font-bold" style="color: var(--dark)">
+                      Konten Premium
+                    </h4>
+                    <p class="mb-3 text-sm" style="color: var(--secondary)">
+                      Ringkasan lengkap hanya untuk pengguna Premium.
+                    </p>
+                    <button class="primary-btn text-sm w-full py-2">
+                      Buka Akses Premium
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/assets/script.js"></script>
+  </body>
+</html>

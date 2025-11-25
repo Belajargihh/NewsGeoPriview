@@ -1,0 +1,684 @@
+{
+	"MD_Metadata": {
+		"fileIdentifier": {
+			"CharacterString": {
+				"__prefix": "gco",
+				"__text": "TASWIL1000020230928_DATA_BATAS_DESAKELURAHAN"
+			}
+		},
+		"language": {
+			"LanguageCode": {
+				"_codeList": "http://www.loc.gov/standards/iso639-2/php/code_list.php",
+				"_codeListValue": "ind",
+				"_codeSpace": "ISO639-2",
+				"__text": "ind"
+			}
+		},
+		"characterSet": {
+			"MD_CharacterSetCode": {
+				"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode",
+				"_codeListValue": "utf8",
+				"_codeSpace": "ISOTC211/19115",
+				"__text": "utf8"
+			}
+		},
+		"hierarchyLevel": {
+			"MD_ScopeCode": {
+				"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode",
+				"_codeListValue": "dataset",
+				"_codeSpace": "ISOTC211/19115",
+				"__text": "dataset"
+			}
+		},
+		"hierarchyLevelName": {
+			"CharacterString": {
+				"__prefix": "gco",
+				"__text": "dataset"
+			}
+		},
+		"contact": {
+			"CI_ResponsibleParty": {
+				"individualName": {
+					"CharacterString": {
+						"__prefix": "gco",
+						"__text": "Astrit Rimayanti"
+					}
+				},
+				"organisationName": {
+					"CharacterString": {
+						"__prefix": "gco",
+						"__text": "Badan Informasi Geospasial"
+					}
+				},
+				"positionName": {
+					"CharacterString": {
+						"__prefix": "gco",
+						"__text": "Kepala Pusat Pemetaan Batas Wilayah"
+					}
+				},
+				"contactInfo": {
+					"CI_Contact": {
+						"phone": {
+							"CI_Telephone": {
+								"voice": {
+									"CharacterString": {
+										"__prefix": "gco",
+										"__text": "(021) 8754654"
+									}
+								}
+							}
+						}
+					}
+				},
+				"role": {
+					"CI_RoleCode": {
+						"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode",
+						"_codeListValue": "resourceProvider",
+						"_codeSpace": "ISOTC211/19115",
+						"__text": "resourceProvider"
+					}
+				}
+			}
+		},
+		"dateStamp": {
+			"Date": {
+				"__prefix": "gco",
+				"__text": "2023-09-28"
+			}
+		},
+		"metadataStandardName": {
+			"CharacterString": {
+				"__prefix": "gco",
+				"__text": "ISO 19139 Geographic Information - Metadata - Implementation Specification"
+			}
+		},
+		"metadataStandardVersion": {
+			"CharacterString": {
+				"__prefix": "gco",
+				"__text": "2007"
+			}
+		},
+		"spatialRepresentationInfo": {
+			"MD_VectorSpatialRepresentation": {
+				"topologyLevel": {
+					"MD_TopologyLevelCode": {
+						"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_TopologyLevelCode",
+						"_codeListValue": "geometryOnly",
+						"_codeSpace": "ISOTC211/19115",
+						"__text": "geometryOnly"
+					}
+				},
+				"geometricObjects": {
+					"MD_GeometricObjects": {
+						"geometricObjectType": {
+							"MD_GeometricObjectTypeCode": {
+								"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_GeometricObjectTypeCode",
+								"_codeListValue": "composite",
+								"_codeSpace": "ISOTC211/19115",
+								"__text": "composite"
+							}
+						},
+						"geometricObjectCount": {
+							"Integer": {
+								"__prefix": "gco",
+								"__text": "83486"
+							}
+						}
+					}
+				}
+			}
+		},
+		"referenceSystemInfo": {
+			"MD_ReferenceSystem": {
+				"referenceSystemIdentifier": {
+					"RS_Identifier": {
+						"code": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "EPSG 4326"
+							}
+						},
+						"codeSpace": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "EPSG"
+							}
+						},
+						"version": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "6.14(3.0.1)"
+							}
+						}
+					}
+				}
+			}
+		},
+		"identificationInfo": {
+			"MD_DataIdentification": {
+				"citation": {
+					"CI_Citation": {
+						"title": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "ADMINISTRASI_AR_DESAKEL"
+							}
+						},
+						"date": {
+							"CI_Date": {
+								"date": {
+									"Date": {
+										"__prefix": "gco",
+										"__text": "2023-09-28"
+									}
+								},
+								"dateType": {
+									"CI_DateTypeCode": {
+										"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode",
+										"_codeListValue": "revision",
+										"_codeSpace": "ISOTC211/19115",
+										"__text": "revision"
+									}
+								}
+							}
+						},
+						"editionDate": {
+							"Date": {
+								"__prefix": "gco",
+								"__text": "2023-09-28"
+							}
+						},
+						"presentationForm": {
+							"CI_PresentationFormCode": {
+								"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_PresentationFormCode",
+								"_codeListValue": "mapDigital",
+								"_codeSpace": "ISOTC211/19115",
+								"__text": "mapDigital"
+							}
+						}
+					}
+				},
+				"abstract": {
+					"CharacterString": {
+						"__prefix": "gco",
+						"__text": "Geodatabase data batas wilayah administrasi desa/kelurahan edisi September 2023 merupakan pemutakhiran dari Geodatabase data batas wilayah administrasi desa/kelurahan edisi Desember 2022. Proses pemutakhiran yang dilakukan antara lain: (1) Pemuktahiran data batas administrasi desa/kelurahan hasil Verifikasi Teknis Batas Wilayah Administrasi Desa/Kelurahan tahun 2022 dan sebagian tahun 2023; (2) Pemuktahiran data batas administrasi desa/kelurahan hasil asistensi peta dasar RDTR/RTRW sebagian tahun 2023; (3) Penyelarasan batas desa/kelurahan pada batas kabupaten/kota mengikuti Permendagri Kabupaten/Kota terbaru; (4) Penyelarasan area saling klaim dan tidak terdefinisi dengan metode salah satunya dibagi berdasarkan prinsip sama jarak lalu digabungkan dengan desa/kelurahan di sekitarnya; (5) Sinkronisasi data wilayah administrasi desa/kelurahan berdasarkan Kepmendagri 100.1.1-6117 Tahun 2022 tentang Pemberian dan Pemutakhiran Kode, Data Wilayah Administrasi Pemerintahan dan Pulau; (6) Penyesuaian alokasi wilayah administrasi provinsi baru di Papua dan Papua Barat.Sumber data pada geodatabase ini antara lain data batas desa/kelurahan hasil kegiatan Ajudikasi Batas Desa tahun 2013-2015, Delineasi Batas Wilayah Administrasi desa secara kartometrik tahun 2016-2017, Delineasi batas wilayah administrasi desa secara kartometrik tanpa kesepakatan tahun 2018-2019, sinkronisasi data batas desa hasil penetapan Pemerintah Daerah mengacu pada standar nasional Katalog Unsur Geografi Indonesia (KUGI) tahun 2019, Kesepakatan Teknis batas wilayah administrasi desa tahun 2020, Kesepakatan Teknis Batas Wilayah Administrasi Desa/Kelurahan Tahun 2021, Verifikasi Teknis Batas Wilayah Administrasi Desa/Kelurahan Tahun 2022, Verifikasi Teknis Batas Wilayah Administrasi Desa/Kelurahan sebagian Tahun 2023, Asistensi Peta Dasar RDTR/RTRW sebagian Tahun 2023, Delineasi batas wilayah administrasi desa melalui kegiatan perjanjian Kerja Sama antara BIG dengan Pemerintah Daerah baik melalui PKS maupun PNBP, data batas wilayah administrasi desa/kelurahan dari Pemerintah Daerah, dan data batas wilayah administrasi desa dari Peta Rupa Bumi Indonesia. Geodatabase ini dibuat menggunakan Garis Pantai Edisi Tahun 2022 yang merupakan pemutakhiran garis pantai penetapan tahun 2021 bersumber dari Pusat Pemetaan Kelautan dan Lingkungan Pantai.Beberapa catatan tambahan dalam Geodatabase data batas wilayah administrasi desa/kelurahan tahun 2022 ini di antaranya adalah: (1) Masih terdapat area tidak terdefinisi untuk wilayah pulau dan danau; (2) Masih terdapat beberapa desa/kelurahan yang tidak ada dalam data spasial karena merupakan hasil pemekaran, rekap daftar desa yang belum ada dalam database ini terlampir dalam tabel rekapitulasi indeks desa berdasarkan Kepmendagri 100.1.1-6117 Tahun 2022 tentang Pemberian dan Pemutakhiran Kode, Data Wilayah Administrasi Pemerintahan dan Pulau; (3) Masih terdapat kondisi desa yang memiliki perbedaan cakupan wilayah administrasi Kecamatan antara data spasial dengan Kepmendagri 050-145 Tahun 2022 di wilayah Papua; (4) Terdapat beberapa wilayah desa yang belum dapat disesuaikan ke batas kabupaten/kota; (5) Terdapat wilayah desa terapung yang tidak tergambarkan pada data garis pantai namun terdefinisi dalam kode dan data wilayah administrasi."
+					}
+				},
+				"pointOfContact": {
+					"CI_ResponsibleParty": {
+						"individualName": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Astrit Rimayanti"
+							}
+						},
+						"organisationName": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Badan Informasi Geospasial"
+							}
+						},
+						"positionName": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Kepala Pusat Pemetaan Batas Wilayah"
+							}
+						},
+						"role": {
+							"CI_RoleCode": {
+								"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode",
+								"_codeListValue": "author",
+								"_codeSpace": "ISOTC211/19115",
+								"__text": "author"
+							}
+						}
+					}
+				},
+				"resourceMaintenance": {
+					"MD_MaintenanceInformation": {
+						"maintenanceAndUpdateFrequency": {
+							"MD_MaintenanceFrequencyCode": {
+								"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode",
+								"_codeListValue": "irregular",
+								"_codeSpace": "ISOTC211/19115",
+								"__text": "irregular"
+							}
+						},
+						"updateScope": [
+							{
+								"MD_ScopeCode": {
+									"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode",
+									"_codeListValue": "feature",
+									"_codeSpace": "ISOTC211/19115",
+									"__text": "feature"
+								}
+							},
+							{
+								"MD_ScopeCode": {
+									"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode",
+									"_codeListValue": "attribute",
+									"_codeSpace": "ISOTC211/19115",
+									"__text": "attribute"
+								}
+							}
+						]
+					}
+				},
+				"resourceFormat": {
+					"MD_Format": {
+						"name": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Geodatabase"
+							}
+						},
+						"version": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Edisi Tahun 2023"
+							}
+						},
+						"specification": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "ADMINISTRASI_AR"
+							}
+						}
+					}
+				},
+				"descriptiveKeywords": [
+					{
+						"MD_Keywords": {
+							"keyword": {
+								"CharacterString": {
+									"__prefix": "gco",
+									"__text": "Geodatabase batas wilayah administrasi desa/kelurahan"
+								}
+							},
+							"type": {
+								"MD_KeywordTypeCode": {
+									"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode",
+									"_codeListValue": "theme",
+									"_codeSpace": "ISOTC211/19115",
+									"__text": "theme"
+								}
+							}
+						}
+					},
+					{
+						"MD_Keywords": {
+							"keyword": {
+								"CharacterString": {
+									"__prefix": "gco",
+									"__text": "Downloadable Data"
+								}
+							},
+							"thesaurusName": {
+								"_uuidref": "723f6998-058e-11dc-8314-0800200c9a66"
+							}
+						}
+					}
+				],
+				"resourceSpecificUsage": {
+					"MD_Usage": {
+						"specificUsage": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Data ini dapat digunakan selama belum tersedia data batas desa/kelurahan yang sudah definitif"
+							}
+						},
+						"usageDateTime": {
+							"DateTime": {
+								"__prefix": "gco",
+								"__text": "2023-09-28T00:00:00"
+							}
+						},
+						"userContactInfo": {
+							"CI_ResponsibleParty": {
+								"individualName": {
+									"CharacterString": {
+										"__prefix": "gco",
+										"__text": "Astrit Rimayanti"
+									}
+								},
+								"organisationName": {
+									"CharacterString": {
+										"__prefix": "gco",
+										"__text": "Pusat Pemetaan Batas Wilayah BIG"
+									}
+								},
+								"positionName": {
+									"CharacterString": {
+										"__prefix": "gco",
+										"__text": "Kepala Pusat Pemetaan Batas Wilayah"
+									}
+								},
+								"role": {
+									"CI_RoleCode": {
+										"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode",
+										"_codeListValue": "owner",
+										"_codeSpace": "ISOTC211/19115",
+										"__text": "owner"
+									}
+								}
+							}
+						}
+					}
+				},
+				"resourceConstraints": {
+					"MD_Constraints": {
+						"useLimitation": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Data ini tidak dapat digunakan sebagai referensi resmi selama belum tersedia data batas desa/kelurahan yang sudah definitif"
+							}
+						}
+					}
+				},
+				"spatialRepresentationType": {
+					"MD_SpatialRepresentationTypeCode": {
+						"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_SpatialRepresentationTypeCode",
+						"_codeListValue": "vector",
+						"_codeSpace": "ISOTC211/19115",
+						"__text": "vector"
+					}
+				},
+				"spatialResolution": {
+					"MD_Resolution": {
+						"equivalentScale": {
+							"MD_RepresentativeFraction": {
+								"denominator": {
+									"Integer": {
+										"__prefix": "gco",
+										"__text": "10000"
+									}
+								}
+							}
+						}
+					}
+				},
+				"language": {
+					"LanguageCode": {
+						"_codeList": "http://www.loc.gov/standards/iso639-2/php/code_list.php",
+						"_codeListValue": "ind",
+						"_codeSpace": "ISO639-2",
+						"__text": "ind"
+					}
+				},
+				"characterSet": {
+					"MD_CharacterSetCode": {
+						"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode",
+						"_codeListValue": "utf8",
+						"_codeSpace": "ISOTC211/19115",
+						"__text": "utf8"
+					}
+				},
+				"topicCategory": {
+					"MD_TopicCategoryCode": "boundaries"
+				},
+				"environmentDescription": {
+					"CharacterString": {
+						"__prefix": "gco",
+						"__text": "Version 6.2 (Build 9200) ; Esri ArcGIS 10.8.1.14362"
+					}
+				},
+				"extent": [
+					{
+						"EX_Extent": {
+							"geographicElement": {
+								"EX_GeographicBoundingBox": {
+									"westBoundLongitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "94.9719110460001"
+										}
+									},
+									"eastBoundLongitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "141.020041789"
+										}
+									},
+									"southBoundLatitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "-11.007615377"
+										}
+									},
+									"northBoundLatitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "6.07683220400005"
+										}
+									}
+								}
+							},
+							"verticalElement": {
+								"EX_VerticalExtent": {
+									"minimumValue": {
+										"Real": {
+											"__prefix": "gco",
+											"__text": "0"
+										}
+									},
+									"maximumValue": {
+										"Real": {
+											"__prefix": "gco",
+											"__text": "1876.8178"
+										}
+									},
+									"verticalCRS": {
+										"_gco:nilReason": "other:see_referenceSystemInfo"
+									}
+								}
+							}
+						}
+					},
+					{
+						"EX_Extent": {
+							"geographicElement": {
+								"EX_GeographicBoundingBox": {
+									"extentTypeCode": {
+										"Boolean": {
+											"__prefix": "gco",
+											"__text": "true"
+										}
+									},
+									"westBoundLongitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "94.971911"
+										}
+									},
+									"eastBoundLongitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "141.020042"
+										}
+									},
+									"southBoundLatitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "-11.007615"
+										}
+									},
+									"northBoundLatitude": {
+										"Decimal": {
+											"__prefix": "gco",
+											"__text": "6.076832"
+										}
+									}
+								}
+							}
+						}
+					}
+				]
+			}
+		},
+		"contentInfo": {
+			"MD_FeatureCatalogueDescription": {
+				"complianceCode": {
+					"Boolean": {
+						"__prefix": "gco",
+						"__text": "true"
+					}
+				},
+				"language": {
+					"LanguageCode": {
+						"_codeList": "http://www.loc.gov/standards/iso639-2/php/code_list.php",
+						"_codeListValue": "ind",
+						"_codeSpace": "ISO639-2",
+						"__text": "ind"
+					}
+				},
+				"includedWithDataset": {
+					"Boolean": {
+						"__prefix": "gco",
+						"__text": "true"
+					}
+				},
+				"featureCatalogueCitation": {
+					"CI_Citation": {
+						"title": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Batas Wilayah Administrasi Desa/Kelurahan Indonesia"
+							}
+						},
+						"date": {
+							"CI_Date": {
+								"date": {
+									"Date": {
+										"__prefix": "gco",
+										"__text": "2023-09-28"
+									}
+								},
+								"dateType": {
+									"CI_DateTypeCode": {
+										"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode",
+										"_codeListValue": "creation",
+										"_codeSpace": "ISOTC211/19115",
+										"__text": "creation"
+									}
+								}
+							}
+						},
+						"edition": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Edisi Tahun 2023"
+							}
+						},
+						"editionDate": {
+							"Date": {
+								"__prefix": "gco",
+								"__text": "2023-09-28"
+							}
+						}
+					}
+				}
+			}
+		},
+		"distributionInfo": {
+			"MD_Distribution": {
+				"distributionFormat": {
+					"MD_Format": {
+						"name": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "File Geodatabase Feature Class"
+							}
+						},
+						"version": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"dataQualityInfo": {
+			"DQ_DataQuality": {
+				"scope": {
+					"DQ_Scope": {
+						"level": {
+							"MD_ScopeCode": {
+								"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode",
+								"_codeListValue": "dataset",
+								"_codeSpace": "ISOTC211/19115",
+								"__text": "dataset"
+							}
+						}
+					}
+				},
+				"lineage": {
+					"LI_Lineage": {
+						"statement": {
+							"CharacterString": {
+								"__prefix": "gco",
+								"__text": "Data ini merupakan kompilasi data batas wilayah administrasi desa/kelurahan dari berbagai sumber"
+							}
+						},
+						"processStep": {
+							"LI_ProcessStep": {
+								"description": {
+									"CharacterString": {
+										"__prefix": "gco",
+										"__text": "Proses pemutakhiran yang dilakukan antara lain: (1) Pemuktahiran data batas administrasi desa/kelurahan hasil Verifikasi Teknis Batas Wilayah Administrasi Desa/Kelurahan tahun 2022 dan sebagian tahun 2023; (2) Pemuktahiran data batas administrasi desa/kelurahan hasil asistensi peta dasar RDTR/RTRW sebagian tahun 2023; (3) Penyelarasan batas desa/kelurahan pada batas kabupaten/kota mengikuti Permendagri Kabupaten/Kota terbaru; (4) Penyelarasan area saling klaim dan tidak terdefinisi dengan metode salah satunya dibagi berdasarkan prinsip sama jarak lalu digabungkan dengan desa/kelurahan di sekitarnya; (5) Sinkronisasi data wilayah administrasi desa/kelurahan berdasarkan Kepmendagri 100.1.1-6117 Tahun 2022 tentang Pemberian dan Pemutakhiran Kode, Data Wilayah Administrasi Pemerintahan dan Pulau; (6) Penyesuaian alokasi wilayah administrasi provinsi baru di Papua dan Papua Barat."
+									}
+								}
+							}
+						},
+						"source": {
+							"LI_Source": {
+								"description": {
+									"CharacterString": {
+										"__prefix": "gco",
+										"__text": "Sumber data pada geodatabase ini antara lain data batas desa/kelurahan hasil kegiatan Ajudikasi Batas Desa tahun 2013-2015, Delineasi Batas Wilayah Administrasi desa secara kartometrik tahun 2016-2017, Delineasi batas wilayah administrasi desa secara kartometrik tanpa kesepakatan tahun 2018-2019, sinkronisasi data batas desa hasil penetapan Pemerintah Daerah mengacu pada standar nasional Katalog Unsur Geografi Indonesia (KUGI) tahun 2019, Kesepakatan Teknis batas wilayah administrasi desa tahun 2020, Kesepakatan Teknis Batas Wilayah Administrasi Desa/Kelurahan Tahun 2021, Verifikasi Teknis Batas Wilayah Administrasi Desa/Kelurahan Tahun 2022, Verifikasi Teknis Batas Wilayah Administrasi Desa/Kelurahan sebagian Tahun 2023, Asistensi Peta Dasar RDTR/RTRW sebagian Tahun 2023, Delineasi batas wilayah administrasi desa melalui kegiatan perjanjian Kerja Sama antara BIG dengan Pemerintah Daerah baik melalui PKS maupun PNBP, data batas wilayah administrasi desa/kelurahan dari Pemerintah Daerah, dan data batas wilayah administrasi desa dari Peta Rupa Bumi Indonesia. Geodatabase ini dibuat menggunakan Garis Pantai Edisi Tahun 2022 yang merupakan pemutakhiran garis pantai penetapan tahun 2021 bersumber dari Pusat Pemetaan Kelautan dan Lingkungan Pantai."
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"applicationSchemaInfo": {
+			"MD_ApplicationSchemaInformation": {
+				"name": {
+					"_gco:nilReason": "missing"
+				},
+				"schemaLanguage": {
+					"CharacterString": {
+						"__prefix": "gco",
+						"__text": "xml"
+					}
+				},
+				"constraintLanguage": {
+					"_gco:nilReason": "missing"
+				}
+			}
+		},
+		"metadataMaintenance": {
+			"MD_MaintenanceInformation": {
+				"maintenanceAndUpdateFrequency": {
+					"MD_MaintenanceFrequencyCode": {
+						"_codeList": "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode",
+						"_codeListValue": "annually",
+						"_codeSpace": "ISOTC211/19115",
+						"__text": "annually"
+					}
+				}
+			}
+		},
+		"_xmlns": "http://www.isotc211.org/2005/gmd",
+		"_xmlns:gco": "http://www.isotc211.org/2005/gco",
+		"_xmlns:gts": "http://www.isotc211.org/2005/gts",
+		"_xmlns:srv": "http://www.isotc211.org/2005/srv",
+		"_xmlns:gml": "http://www.opengis.net/gml/3.2",
+		"_xmlns:xlink": "http://www.w3.org/1999/xlink",
+		"_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+	}
+}
