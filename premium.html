@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade Premium - NewsGeo</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="Mid-client-UQWrQYuGP8y9NMT8"> 
+    </script>
+
+    <style>
+        :root {
+            --primary: #5B86A4;
+            --secondary: #34495e;
+            --dark: #2c3e50;
+            --light: #F9FAFB;
+            --accent: #4CA1AF;
+            --gradient: linear-gradient(135deg, #5B86A4 0%, #4CA1AF 100%);
+        }
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; color: var(--dark); }
+        
+        .checkout-card {
+            background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .gradient-bg { background: var(--gradient); color: white; }
+        
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        #loading-overlay.active { opacity: 1; pointer-events: all; }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading-overlay">
+        <div class="flex flex-col items-center">
+            <svg class="animate-spin h-10 w-10 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="text-sm font-medium text-gray-600">Memproses Transaksi...</p>
+        </div>
+    </div>
+
+    <header class="bg-white shadow-sm py-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-5 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <a href="/" class="text-2xl font-bold" style="color: var(--primary);">NewsGeo</a>
+                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">CHECKOUT</span>
+            </div>
+            <a href="/" class="text-sm text-gray-500 hover:text-gray-800 font-medium">
+                <i class="fas fa-times mr-1"></i> Batal
+            </a>
+        </div>
+    </header>
+
+    <main class="py-12 px-5">
+        <div class="max-w-4xl mx-auto">
+            
+            <div class="checkout-card grid grid-cols-1 md:grid-cols-3">
+                
+                <div class="col-span-2 p-8">
+                    <h1 class="text-2xl font-bold mb-6">Ringkasan Pesanan</h1>
+                    
+                    <div class="flex items-start gap-4 mb-6 border-b border-gray-100 pb-6">
+                        <div class="w-16 h-16 rounded-lg gradient-bg flex items-center justify-center text-2xl shadow-md">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">NewsGeo Premium Plan</h3>
+                            <p class="text-sm text-gray-500 mb-2">Langganan Bulanan</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded border border-green-100"><i class="fas fa-check mr-1"></i>Analisis Tren</span>
+                                <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded border border-green-100"><i class="fas fa-check mr-1"></i>Unlimited Link</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-700 mb-3">Informasi Pelanggan</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i class="fas fa-user text-gray-400 w-5"></i>
+                                <span id="display-name" class="font-medium text-gray-800">Memuat nama...</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-envelope text-gray-400 w-5"></i>
+                                <span id="display-email" class="text-gray-600">Memuat email...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 text-sm text-gray-500 bg-blue-50 p-3 rounded text-blue-800">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Pembayaran aman diproses oleh Midtrans.</span>
+                    </div>
+                </div>
+
+                <div class="col-span-1 bg-gray-50 p-8 border-l border-gray-100 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-4">Rincian Harga</h3>
+                        <div class="flex justify-between mb-2 text-sm">
+                            <span class="text-gray-600">Subtotal</span>
+                            <span class="font-medium">Rp 50.000</span>
+                        </div>
+                        <div class="flex justify-between mb-4 text-sm">
+                            <span class="text-gray-600">Pajak (PPN)</span>
+                            <span class="font-medium text-green-600">Rp 0 (Termasuk)</span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-4 flex justify-between items-center mb-8">
+                            <span class="font-bold text-lg">Total</span>
+                            <span class="font-bold text-xl text-blue-600">Rp 50.000</span>
+                        </div>
+                    </div>
+
+                    <button id="pay-button" class="w-full py-3 rounded-xl font-bold text-white shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none" style="background: var(--gradient);">
+                        Bayar Sekarang
+                    </button>
+                    
+                    <p class="text-xs text-center text-gray-400 mt-4">
+                        Dengan membayar, Anda menyetujui Syarat & Ketentuan NewsGeo.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        // Import Library Firebase (Sama persis dengan index.html ditambah fungsi Firestore update)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        // 1. CONFIG FIREBASE (Sama dengan index.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbIJFreuJGEBjldnonylBF7IDUt2PYO9Q",
+            authDomain: "newsgeo.firebaseapp.com",
+            projectId: "newsgeo",
+            storageBucket: "newsgeo.firebasestorage.app",
+            messagingSenderId: "714834550588",
+            appId: "1:714834550588:web:9a3bb2704797f5437b4839",
+            measurementId: "G-L6B79R95S5"
+        };
+
+        // Inisialisasi Firebase & Database
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Elements HTML
+        const nameEl = document.getElementById('display-name');
+        const emailEl = document.getElementById('display-email');
+        const payBtn = document.getElementById('pay-button');
+        const loadingOverlay = document.getElementById('loading-overlay');
+
+        let currentUserData = null;
+
+        // 2. CEK USER LOGIN (Wajib login untuk bayar)
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Tampilkan data user di kartu
+                nameEl.textContent = user.displayName || "Pengguna Tanpa Nama";
+                emailEl.textContent = user.email;
+                currentUserData = user;
+            } else {
+                // Kalau belum login, lempar balik ke halaman utama/login
+                alert("Silakan login terlebih dahulu untuk upgrade.");
+                window.location.href = "index.html";
+            }
+        });
+
+        // 3. LOGIKA TOMBOL BAYAR & UPDATE DATABASE
+        payBtn.addEventListener('click', async () => {
+            if (!currentUserData) return;
+
+            // Tampilkan Loading
+            loadingOverlay.classList.add('active');
+
+            try {
+                // A. Panggil Server Backend Lokal untuk dapat Token Midtrans
+                const response = await fetch('http://localhost:5000/api/create-transaction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        uid: currentUserData.uid,
+                        email: currentUserData.email,
+                        name: currentUserData.displayName || "User"
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || "Gagal mendapatkan token");
+
+                // B. Token Diterima -> Tutup Loading -> Buka Popup Midtrans
+                loadingOverlay.classList.remove('active');
+                
+                window.snap.pay(data.token, {
+                    // --- BAGIAN INI YANG PENTING ---
+                    onSuccess: async function(result){
+                        console.log("Pembayaran Sukses!", result);
+                        
+                        // Tampilkan loading lagi saat proses update database
+                        loadingOverlay.classList.add('active');
+                        
+                        try {
+                            // 1. UPDATE FIREBASE: Ubah role jadi 'premium'
+                            const userRef = doc(db, "users", currentUserData.uid);
+                            
+                            await updateDoc(userRef, { 
+                                role: "premium", // <-- INI YANG MEMBUKA FITUR
+                                premiumSince: serverTimestamp(), // Mencatat tanggal upgrade
+                                updatedAt: serverTimestamp()
+                            });
+                            
+                            console.log("Database berhasil diupdate menjadi Premium");
+                            alert("Selamat! Akun Anda sekarang Premium.");
+
+                            // 2. Redirect ke Dashboard (Search)
+                            window.location.href = "search.html";
+
+                        } catch (err) {
+                            console.error("Gagal update database:", err);
+                            // Tetap redirect meskipun error DB (bisa dihandle manual nanti oleh admin jika komplain)
+                            alert("Pembayaran berhasil, namun status belum terupdate otomatis. Hubungi CS.");
+                            window.location.href = "search.html";
+                        }
+                    },
+                    onPending: function(result){
+                        alert("Menunggu pembayaran Anda...");
+                    },
+                    onError: function(result){
+                        alert("Pembayaran Gagal/Dibatalkan.");
+                    },
+                    onClose: function(){
+                        alert('Anda menutup pop-up tanpa menyelesaikan pembayaran');
+                    }
+                });
+
+            } catch (error) {
+                console.error(error);
+                loadingOverlay.classList.remove('active');
+                alert("Gagal memproses transaksi: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

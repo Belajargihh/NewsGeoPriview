@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis NewsGeo - Firebase Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        :root {
+            --primary: #5B86A4;
+            --secondary: #34495e;
+            --dark: #2c3e50;
+            --light: #F9FAFB;
+            --accent: #4CA1AF;
+            --gradient: linear-gradient(135deg, #5B86A4 0%, #4CA1AF 100%);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light); color: var(--dark); overflow-x: hidden;
+        }
+
+        header {
+            background-color: white; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed; width: 100%; top: 0; z-index: 1000; transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 5px 0; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+        }
+
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-size: 22px; font-weight: 700; color: var(--primary); }
+
+        .nav-menu a {
+            text-decoration: none; color: var(--secondary); font-weight: 500;
+            position: relative; transition: all 0.3s ease;
+        }
+        .nav-menu a:hover { color: var(--primary); }
+
+        .nav-link-icon { display: flex; align-items: center; gap: 8px; }
+        .nav-link-icon i { font-size: 1rem; padding: 10px 0; }
+        
+        .nav-buttons-container { display: flex; gap: 15px; }
+
+        .btn-primary-nav {
+            background: var(--gradient); color: white; border: none; padding: 8px 20px;
+            border-radius: 30px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 134, 164, 0.2);
+        }
+        .btn-primary-nav:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(91, 134, 164, 0.3); }
+
+        .btn-secondary-nav {
+            background: white; color: var(--primary); border: 2px solid var(--primary);
+            padding: 6px 20px; border-radius: 30px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;
+        }
+        .btn-secondary-nav:hover { background: rgba(91, 134, 164, 0.05); transform: translateY(-2px); }
+
+        .primary-btn {
+            background: var(--gradient); color: white; border: none; padding: 12px 30px;
+            border-radius: 30px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 134, 164, 0.3); text-decoration: none; display: inline-block;
+        }
+        .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(91, 134, 164, 0.4); }
+
+        .secondary-btn {
+            background: white; color: var(--primary); border: 2px solid var(--primary);
+            padding: 10px 28px; border-radius: 30px; font-weight: 500; cursor: pointer;
+            transition: all 0.3s ease; text-decoration: none; display: inline-block;
+        }
+        .secondary-btn:hover { background: rgba(91, 134, 164, 0.05); transform: translateY(-3px); }
+
+        .hero-newsgeo {
+            padding: 150px 0 100px;
+            background: linear-gradient(135deg, rgba(91, 134, 164, 0.1) 0%, rgba(76, 161, 175, 0.1) 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero-newsgeo::before {
+            content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%;
+            background: rgba(91, 134, 164, 0.05); top: -250px; right: -100px; z-index: 0;
+        }
+        .hero-newsgeo::after {
+            content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%;
+            background: rgba(76, 161, 175, 0.05); bottom: -150px; left: -100px; z-index: 0;
+        }
+
+        .feature-card, .pricing-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .feature-card:hover, .pricing-card:hover {
+            transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .map-container {
+            height: 500px; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); position: relative;
+        }
+
+        .mobile-menu-btn { background: none; border: none; font-size: 24px; color: var(--primary); cursor: pointer; }
+
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 60px 0 20px; }
+        .social-link {
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.1);
+            display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s ease;
+        }
+        .social-link:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: all 0.3s ease; }
+        .footer-links a:hover { color: white; padding-left: 5px; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.5); backdrop-filter: blur(8px);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+            padding: 20px; opacity: 0; transition: opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-content-inner {
+            background: white; width: 100%; max-width: 420px; padding: 2.5rem;
+            border-radius: 28px; box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.2);
+            position: relative; transform: scale(0.95); transition: transform 0.3s ease-in-out;
+            border: 1px solid #f0f0f0;
+        }
+        .modal-overlay.active .modal-content-inner { transform: scale(1); }
+
+        .modal-close-btn {
+            position: absolute; top: 20px; right: 25px; font-size: 24px; color: #9ca3af;
+            cursor: pointer; transition: color 0.2s ease; z-index: 10;
+        }
+        .modal-close-btn:hover { color: #34495e; }
+        
+        /* Google Input & Button Styles */
+        .google-input {
+            border: 1px solid #dadce0; border-radius: 8px; padding: 13px 15px; font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .google-input:focus {
+            border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1); outline: none;
+        }
+        .google-btn-action {
+            background-color: #1a73e8; color: white; border-radius: 20px; font-weight: 500;
+        }
+        .google-btn-action:hover { background-color: #1557b0; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
+        @media (max-width: 768px) {
+            .nav-menu.mobile-active {
+                display: flex; flex-direction: column; position: absolute; top: 100%; left: 0;
+                width: 100%; background-color: white; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                padding: 20px; gap: 10px; align-items: stretch;
+            }
+            .hero-newsgeo { padding: 120px 0 80px; }
+            .map-container { height: 350px; }
+        }
+
+        /* Badge Role */
+        .role-badge {
+            font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; margin-left: 8px;
+        }
+        .role-pengguna { background-color: #e5e7eb; color: #374151; }
+        .role-premium { background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="max-w-6xl mx-auto px-5 w-full">
+            <div class="flex justify-between items-center py-2">
+                <div class="logo">
+                    <a href="/">
+                        <div class="logo-text">NewsGeo</div>
+                    </a>
+                </div>
+
+                <ul class="nav-menu hidden md:flex items-center list-none gap-[30px]">
+                    <li><a href="#" class="active nav-link-icon"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                    <li><a href="#fitur" class="nav-link-icon"><i class="fas fa-bolt"></i><span>Fitur</span></a></li>
+                    <li><a href="#harga" class="nav-link-icon"><i class="fas fa-tag"></i><span>Harga</span></a></li>
+                    <li><a href="#map" class="nav-link-icon"><i class="fas fa-map-marked-alt"></i><span>Peta</span></a></li>
+
+                    <li class="nav-buttons-container hidden opacity-0 transition-opacity duration-300" id="auth-links">
+                        <button class="btn-secondary-nav" id="nav-login-btn">Masuk</button>
+                        <button class="btn-primary-nav" id="nav-register-btn">Daftar</button>
+                    </li>
+
+                    <li id="profile-dropdown" class="relative hidden opacity-0 transition-opacity duration-300">
+                        <button id="profile-btn" class="flex items-center gap-2 transition-transform duration-200 hover:scale-105">
+                            <span class="inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-100">
+                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </span>
+                            <span id="profile-username" class="font-medium" style="color: var(--secondary);">Halo, User</span>
+                        </button>
+
+                        <div id="profile-menu" class="absolute right-0 mt-2 w-64 origin-top-right rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-30">
+                            <div class="py-1">
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-semibold" style="color: var(--dark);" id="menu-username">Nama Pengguna</p>
+                                        <span id="menu-role-badge" class="role-badge role-pengguna">FREE</span>
+                                    </div>
+                                    <p class="truncate text-xs text-gray-500 mt-1" id="menu-email">email@pengguna.com</p>
+                                </div>
+                                <div class="border-t border-gray-100 mt-1"></div>
+                                <a href="#harga" class="flex items-center gap-2 px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-50 font-medium">
+                                    <i class="fas fa-crown w-4"></i>
+                                    <span>Upgrade Premium</span>
+                                </a>
+                                <button id="logout-btn" class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt w-4"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <button class="mobile-menu-btn md:hidden">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-newsgeo text-gray-800">
+            <div class="max-w-6xl mx-auto px-5 w-full text-center relative z-10">
+                <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4" style="color: var(--dark);">
+                    Ubah Link Berita Menjadi <span style="background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Peta dan Analisis</span>
+                </h2>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8" style="color: var(--secondary);">
+                    Platform API kami secara otomatis memetakan lokasi kejadian berita, membuat ringkasan NLP, dan melacak popularitas tren berita terkait.
+                </p>
+                
+                <div class="hero-actions flex flex-col md:flex-row gap-4 justify-center">
+                    <button class="primary-btn" id="hero-action-btn">
+                        Coba Gratis
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="fitur" class="py-20" style="background-color: var(--light);">
+            <div class="max-w-6xl mx-auto px-5 w-full">
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl md:text-4xl font-bold mb-3" style="color: var(--dark);">Lebih dari Sekadar Link: Dapatkan Wawasan Intelijen</h3>
+                    <p class="text-lg" style="color: var(--secondary);">Ekstrak informasi berharga yang tersembunyi di dalam setiap berita.</p>
+                </div>
+                <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                        <div class="mb-4 inline-block p-4 bg-green-100 rounded-full">
+                            <i class="fas fa-map-marker-alt text-2xl text-green-600"></i>
+                        </div>
+                        <h4 class="text-2xl font-semibold mb-2">Geocoding Otomatis</h4>
+                        <p style="color: var(--secondary);">API kami secara cerdas mendeteksi lokasi spesifik kejadian dan menampilkannya di peta interaktif.</p>
+                    </div>
+                    <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                        <div class="mb-4 inline-block p-4 bg-purple-100 rounded-full">
+                           <i class="fas fa-robot text-2xl text-purple-600"></i>
+                        </div>
+                        <h4 class="text-2xl font-semibold mb-2">Ringkasan AI (NLP)</h4>
+                        <p style="color: var(--secondary);">Sistem kami menggunakan NLP canggih untuk membuat ringkasan otomatis dari isi berita.</p>
+                    </div>
+                    <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                        <div class="mb-4 inline-block p-4 bg-yellow-100 rounded-full">
+                            <i class="fas fa-fire text-2xl text-yellow-600"></i>
+                        </div>
+                        <h4 class="text-2xl font-semibold mb-2">Analisis Tren (Premium)</h4>
+                        <p style="color: var(--secondary);">Cari berita serupa yang sedang tren dan sajikan dalam bentuk heatmap visual.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="map" class="py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-5 w-full">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10" style="color: var(--dark);">Peta Analisis Berita</h2>
+                <div id="map-container" class="map-container"></div>
+            </div>
+        </section>
+
+        <section id="harga" class="py-20" style="background-color: var(--light);">
+            <div class="max-w-6xl mx-auto px-5 w-full">
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl md:text-4xl font-bold mb-3" style="color: var(--dark);">Pilih Paket Analisis</h3>
+                    <p class="text-lg" style="color: var(--secondary);">Mulai gratis sebagai Pengguna atau upgrade ke Premium.</p>
+                </div>
+                <div class="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-8">
+                    
+                    <div class="pricing-card w-full max-w-md bg-white border border-gray-200 rounded-xl p-8 flex flex-col">
+                        <h4 class="text-3xl font-bold text-center mb-2">Free</h4>
+                        <p class="text-center h-16 mb-6" style="color: var(--secondary);">Role: Pengguna Biasa</p>
+                        <ul class="space-y-4 mb-8 flex-grow">
+                            <li class="flex items-center"><span class="text-green-500 mr-3">&#10003;</span> 3 link per bulan</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-3">&#10003;</span> Akses Peta Dasar</li>
+                            <li class="flex items-center text-gray-400"><span class="text-red-500 mr-3">&#10005;</span> Analisis Tren</li>
+                        </ul>
+                        <button class="w-full secondary-btn" onclick="document.getElementById('nav-register-btn').click()">Daftar Gratis</button>
+                    </div>
+                    
+                    <div class="pricing-card w-full max-w-md rounded-xl p-8 shadow-2xl relative flex flex-col" style="background-color: var(--dark); color: white;">
+                        <span class="absolute top-0 right-8 bg-yellow-400 text-blue-900 font-bold text-sm px-4 py-1 rounded-b-lg">Premium</span>
+                        <h4 class="text-3xl font-bold text-center mb-2">Pro</h4>
+                        <p class="text-gray-300 text-center h-16 mb-6">Role: Premium Member</p>
+                        <ul class="space-y-4 mb-8 flex-grow">
+                            <li class="flex items-center"><span class="text-green-400 mr-3">&#10003;</span> Unlimited Link</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-3">&#10003;</span> Analisis Tren & Heatmap</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-3">&#10003;</span> Ekspor Data</li>
+                        </ul>
+                        
+                        <a href="premium.html" id="upgrade-btn" class="w-full primary-btn text-center">Upgrade Sekarang</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="max-w-6xl mx-auto px-5 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr] gap-10 mb-10">
+                <div class="footer-about">
+                    <div class="logo-text" style="color: white; font-size: 22px; font-weight: 700;">NewsGeo</div>
+                    <p class="mt-4 opacity-70">Platform analisis data geospatial dan pelacakan tren berita.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Tautan</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Beranda</a></li>
+                        <li><a href="#fitur">Fitur</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Kontak</h3>
+                    <p class="opacity-70">kontak@newsgeo.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NewsGeo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content-inner">
+            <span class="modal-close-btn" id="login-close-btn">&times;</span>
+            <div class="text-center mb-6">
+                <div class="logo-text text-2xl font-bold mb-2 text-center text-primary">NewsGeo</div>
+                <h2 class="text-xl font-medium" style="color: var(--dark);">Masuk</h2>
+                <p class="text-sm mt-2" style="color: var(--secondary);">Lanjutkan ke NewsGeo</p>
+            </div>
+
+            <button id="google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 hover:shadow-sm text-gray-700 font-medium py-2.5 px-4 rounded-full transition-all duration-200 mb-6">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                <span>Masuk dengan Google</span>
+            </button>
+            
+            <div class="relative flex py-2 items-center mb-6">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-medium">ATAU</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <input id="login-email" name="email" type="email" autocomplete="email" required class="google-input w-full" placeholder="Email">
+                </div>
+                <div>
+                    <input id="login-password" name="password" type="password" autocomplete="current-password" required class="google-input w-full" placeholder="Sandi">
+                </div>
+                
+                <div class="pt-4 flex justify-between items-center">
+                    <a href="#" id="show-register-link" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Buat akun</a>
+                    <button id="login-submit-button" type="submit" class="google-btn-action py-2.5 px-6 flex items-center justify-center transition-all duration-300 ease-in-out">
+                        <span id="login-button-text">Berikutnya</span>
+                        <svg id="login-button-spinner" class="animate-spin ml-2 h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
+                </div>
+                <div id="login-alert-message" class="text-center text-sm hidden mt-2 text-red-600"></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="register-modal" class="modal-overlay">
+        <div class="modal-content-inner">
+            <span class="modal-close-btn" id="register-close-btn">&times;</span>
+            <div class="text-center mb-6">
+                <div class="logo-text text-2xl font-bold mb-2 text-center text-primary">NewsGeo</div>
+                <h2 class="text-xl font-medium" style="color: var(--dark);">Buat Akun</h2>
+                <p class="text-sm mt-2" style="color: var(--secondary);">Otomatis terdaftar sebagai <b>Pengguna</b></p>
+            </div>
+            
+            <button id="google-register-btn" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 hover:shadow-sm text-gray-700 font-medium py-2.5 px-4 rounded-full transition-all duration-200 mb-6">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                <span>Daftar dengan Google</span>
+            </button>
+            
+            <div class="relative flex py-2 items-center mb-6">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-medium">ATAU</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <form id="registration-form" class="space-y-4">
+                <div>
+                    <input id="reg-username" name="username" type="text" required class="google-input w-full" placeholder="Nama Lengkap">
+                </div>
+                <div>
+                    <input id="reg-email" name="email" type="email" autocomplete="email" required class="google-input w-full" placeholder="Email">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <input id="reg-password" name="password" type="password" autocomplete="new-password" required class="google-input w-full" placeholder="Sandi">
+                    </div>
+                    <div>
+                        <input id="reg-confirm-password" name="confirm-password" type="password" autocomplete="new-password" required class="google-input w-full" placeholder="Konfirmasi">
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-between items-center">
+                    <a href="#" id="show-login-link" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Login saja</a>
+                    <button id="reg-submit-button" type="submit" class="google-btn-action py-2.5 px-6 flex items-center justify-center transition-all duration-300 ease-in-out">
+                        <span id="reg-button-text">Berikutnya</span>
+                        <svg id="reg-button-spinner" class="animate-spin ml-2 h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
+                </div>
+                <div id="reg-alert-message" class="text-center text-sm hidden mt-2 text-red-600"></div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase Functions (Versi Modular)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ==========================================
+        // 1. KONFIGURASI FIREBASE ANDA
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbIJFreuJGEBjldnonylBF7IDUt2PYO9Q",
+            authDomain: "newsgeo.firebaseapp.com",
+            projectId: "newsgeo",
+            storageBucket: "newsgeo.firebasestorage.app",
+            messagingSenderId: "714834550588",
+            appId: "1:714834550588:web:9a3bb2704797f5437b4839",
+            measurementId: "G-L6B79R95S5"
+        };
+
+        // Inisialisasi Firebase
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            console.log("Firebase initialized successfully");
+        } catch (e) {
+            console.error("Firebase Error: Pastikan config sudah diisi!", e);
+        }
+
+        // --- Elemen UI Navbar & Profile ---
+        const authLinks = document.getElementById('auth-links');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileBtn = document.getElementById('profile-btn');
+        const profileMenu = document.getElementById('profile-menu');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        const menuUsername = document.getElementById('menu-username');
+        const menuEmail = document.getElementById('menu-email');
+        const menuRoleBadge = document.getElementById('menu-role-badge');
+        const profileUsername = document.getElementById('profile-username');
+
+        // --- MODAL ELEMENTS ---
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+
+        // --- TOMBOL HERO (Tunggal) ---
+        const heroBtn = document.getElementById('hero-action-btn');
+
+        // ==========================================
+        // 2. CEK SESI PENGGUNA (REALTIME)
+        // ==========================================
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // --- USER LOGIN ---
+                console.log("User logged in:", user.uid);
+                
+                // Ambil data detail (termasuk Role) dari Firestore
+                let userRole = 'pengguna'; // Default fallback
+                let displayName = user.displayName || 'User';
+
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userDocRef);
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+                        userRole = userData.role || 'pengguna';
+                        displayName = userData.username || user.displayName;
+                    }
+                } catch (err) {
+                    console.error("Error fetching user role:", err);
+                }
+
+                // Update UI
+                updateUIState(true, displayName, user.email, userRole);
+
+            } else {
+                // --- USER LOGOUT ---
+                console.log("User logged out");
+                updateUIState(false);
+            }
+        });
+
+        // --- FUNGSI UPDATE UI (REVISI FINAL: SEARCH.HTML) ---
+        function updateUIState(isLoggedIn, name = '', email = '', role = 'pengguna') {
+            if (isLoggedIn) {
+                // --- KONDISI: SUDAH LOGIN ---
+
+                // 1. Ubah Navbar
+                authLinks.classList.add('hidden', 'opacity-0');
+                profileDropdown.classList.remove('hidden');
+                setTimeout(() => profileDropdown.classList.remove('opacity-0'), 10);
+
+                // 2. Tombol Hero "Coba Gratis" -> Redirect ke search.html
+                if (heroBtn) {
+                    heroBtn.textContent = 'Coba Gratis'; // Teks tetap
+                    heroBtn.onclick = () => {
+                        window.location.href = 'search.html';
+                    };
+                }
+                
+                // 3. Update Info User
+                if (menuUsername) menuUsername.textContent = name;
+                if (profileUsername) profileUsername.textContent = `Halo, ${name.split(' ')[0]}`;
+                if (menuEmail) menuEmail.textContent = email;
+
+                // 4. Update Badge Role
+                if (menuRoleBadge) {
+                    menuRoleBadge.textContent = role === 'premium' ? 'PREMIUM' : 'FREE';
+                    menuRoleBadge.className = `role-badge ${role === 'premium' ? 'role-premium' : 'role-pengguna'}`;
+                }
+
+            } else {
+                // --- KONDISI: BELUM LOGIN ---
+
+                // 1. Ubah Navbar
+                authLinks.classList.remove('hidden');
+                setTimeout(() => authLinks.classList.remove('opacity-0'), 10);
+                profileDropdown.classList.add('hidden', 'opacity-0');
+
+                // 2. Tombol Hero "Coba Gratis" -> Buka Modal Register
+                if (heroBtn) {
+                    heroBtn.textContent = 'Coba Gratis'; // Teks tetap
+                    heroBtn.onclick = () => {
+                        if(registerModal) registerModal.classList.add('active');
+                    };
+                }
+            }
+        }
+
+        // ==========================================
+        // 3. FUNGSI UTILITY DATABASE (DEFAULT ROLE)
+        // ==========================================
+        async function ensureUserDocument(user, additionalData = {}) {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            // Jika dokumen belum ada (Pengguna Baru), buat dengan role 'pengguna'
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    username: additionalData.username || user.displayName || "User",
+                    email: user.email,
+                    role: 'pengguna',
+                    createdAt: serverTimestamp(),
+                    photoURL: user.photoURL || null
+                });
+                console.log("New user document created with role: pengguna");
+            }
+        }
+
+        // ==========================================
+        // 4. GOOGLE LOGIN HANDLER
+        // ==========================================
+        async function handleGoogleLogin() {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                // Pastikan data tersimpan di Firestore
+                await ensureUserDocument(user);
+                
+                hideModal(loginModal);
+                hideModal(registerModal);
+            } catch (error) {
+                console.error("Google Login Error:", error);
+                alert("Login Google Gagal: " + error.message);
+            }
+        }
+
+        const googleLoginBtn = document.getElementById('google-login-btn');
+        const googleRegisterBtn = document.getElementById('google-register-btn');
+
+        if (googleLoginBtn) googleLoginBtn.addEventListener('click', (e) => { e.preventDefault(); handleGoogleLogin(); });
+        if (googleRegisterBtn) googleRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); handleGoogleLogin(); });
+
+        // ==========================================
+        // 5. EMAIL REGISTER HANDLER
+        // ==========================================
+        const regForm = document.getElementById('registration-form');
+        const regAlert = document.getElementById('reg-alert-message');
+        const regBtn = document.getElementById('reg-submit-button');
+        const regSpinner = document.getElementById('reg-button-spinner');
+        const regBtnText = document.getElementById('reg-button-text');
+
+        if (regForm) {
+            regForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                regAlert.classList.add('hidden');
+                toggleLoading(regBtn, regBtnText, regSpinner, true);
+
+                const username = regForm.username.value;
+                const email = regForm.email.value;
+                const password = regForm.password.value;
+                const confirmPass = regForm['confirm-password'].value;
+
+                if (password !== confirmPass) {
+                    regAlert.textContent = "Sandi tidak cocok.";
+                    regAlert.classList.remove('hidden');
+                    toggleLoading(regBtn, regBtnText, regSpinner, false);
+                    return;
+                }
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    await updateProfile(user, { displayName: username });
+                    await ensureUserDocument(user, { username: username });
+
+                    regForm.reset();
+                    alert("Akun berhasil dibuat! Selamat datang.");
+                    hideModal(registerModal);
+                } catch (error) {
+                    regAlert.textContent = mapAuthErrorMessage(error.code);
+                    regAlert.classList.remove('hidden');
+                } finally {
+                    toggleLoading(regBtn, regBtnText, regSpinner, false);
+                }
+            });
+        }
+
+        // ==========================================
+        // 6. EMAIL LOGIN HANDLER
+        // ==========================================
+        const loginForm = document.getElementById('login-form');
+        const loginAlert = document.getElementById('login-alert-message');
+        const loginBtn = document.getElementById('login-submit-button');
+        const loginSpinner = document.getElementById('login-button-spinner');
+        const loginBtnText = document.getElementById('login-button-text');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                loginAlert.classList.add('hidden');
+                toggleLoading(loginBtn, loginBtnText, loginSpinner, true);
+
+                const email = loginForm.email.value;
+                const password = loginForm.password.value;
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    loginForm.reset();
+                    hideModal(loginModal);
+                } catch (error) {
+                    loginAlert.textContent = mapAuthErrorMessage(error.code);
+                    loginAlert.classList.remove('hidden');
+                } finally {
+                    toggleLoading(loginBtn, loginBtnText, loginSpinner, false);
+                }
+            });
+        }
+
+        // --- Helper Functions ---
+        function toggleLoading(btn, textSpan, spinner, isLoading) {
+            btn.disabled = isLoading;
+            if (isLoading) {
+                textSpan.classList.add('hidden');
+                spinner.classList.remove('hidden');
+            } else {
+                textSpan.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+
+        function mapAuthErrorMessage(code) {
+            switch (code) {
+                case 'auth/email-already-in-use': return "Email sudah terdaftar.";
+                case 'auth/invalid-email': return "Format email salah.";
+                case 'auth/user-not-found': return "Akun tidak ditemukan.";
+                case 'auth/wrong-password': return "Sandi salah.";
+                case 'auth/weak-password': return "Sandi terlalu lemah (min. 6 karakter).";
+                case 'auth/invalid-credential': return "Email atau sandi salah.";
+                default: return "Terjadi kesalahan: " + code;
+            }
+        }
+
+        // --- Logout ---
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                await signOut(auth);
+                window.location.reload();
+            });
+        }
+
+        // --- Dropdown Profile Logic ---
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileMenu.classList.toggle('hidden');
+            });
+        }
+        window.addEventListener('click', (e) => {
+            if (profileMenu && !profileMenu.classList.contains('hidden')) {
+                if (!profileDropdown.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            }
+        });
+        
+        // --- Modal Logic (Vanilla JS) ---
+        const navLoginBtn = document.getElementById('nav-login-btn');
+        const navRegisterBtn = document.getElementById('nav-register-btn');
+        const loginCloseBtn = document.getElementById('login-close-btn');
+        const registerCloseBtn = document.getElementById('register-close-btn');
+        const showRegisterLink = document.getElementById('show-register-link');
+        const showLoginLink = document.getElementById('show-login-link');
+
+        function showModal(modal) { if (modal) modal.classList.add('active'); }
+        function hideModal(modal) { if (modal) modal.classList.remove('active'); }
+
+        if(navLoginBtn) navLoginBtn.addEventListener('click', () => showModal(loginModal));
+        if(navRegisterBtn) navRegisterBtn.addEventListener('click', () => showModal(registerModal));
+        if(loginCloseBtn) loginCloseBtn.addEventListener('click', () => hideModal(loginModal));
+        if(registerCloseBtn) registerCloseBtn.addEventListener('click', () => hideModal(registerModal));
+
+        if(showRegisterLink) showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault(); hideModal(loginModal); showModal(registerModal);
+        });
+        if(showLoginLink) showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault(); hideModal(registerModal); showModal(loginModal);
+        });
+
+        [loginModal, registerModal].forEach(modal => {
+            if(modal) modal.addEventListener('click', (e) => {
+                if(e.target === modal) hideModal(modal);
+            });
+        });
+
+        // Scroll Effect Header
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('header');
+            if (header) {
+                if (window.scrollY > 50) header.classList.add('scrolled');
+                else header.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile Menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        if(mobileMenuBtn && navMenu) mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('mobile-active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navMenu.classList.contains('mobile-active')) {
+                icon.classList.remove('fa-bars'); icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times'); icon.classList.add('fa-bars');
+            }
+        });
+
+        // Leaflet Init
+        if (document.getElementById('map-container')) {
+            const map = L.map('map-container', { minZoom: 3 }).setView([-2.5489, 118.0149], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+        }
+
+        // =========================================================
+        // LOGIKA BARU: TOMBOL UPGRADE CEK LOGIN DULU (MODIFIKASI)
+        // =========================================================
+        const upgradeBtn = document.getElementById('upgrade-btn');
+        if (upgradeBtn) {
+            upgradeBtn.addEventListener('click', (e) => {
+                // Periksa apakah user login
+                if (!auth.currentUser) {
+                    // Jika belum login, stop link dan buka modal login
+                    e.preventDefault();
+                    
+                    // Opsional: Ganti judul modal agar user paham kenapa harus login
+                    const modalTitle = document.querySelector('#login-modal h2');
+                    const modalDesc = document.querySelector('#login-modal p.text-sm');
+                    if(modalTitle) modalTitle.textContent = "Login Diperlukan";
+                    if(modalDesc) modalDesc.textContent = "Silakan login untuk upgrade ke Premium";
+
+                    showModal(loginModal);
+                } 
+                // Jika sudah login, biarkan link berjalan normal ke href="premium.html"
+            });
+        }
+    </script>
+</body>
+</html>
